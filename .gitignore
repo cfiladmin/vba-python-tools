@@ -1,0 +1,13 @@
+# テスト出力（個人データ含む可能性があるため除外）
+test_run/output/
+test_run/input/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.env
+
+# OS
+.DS_Store
+Thumbs.db
