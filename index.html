@@ -3,511 +3,497 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Excel・CSV業務自動化 | 経理10年×VBA/Python</title>
+  <title>Python・VBA 業務自動化ツール | 経理10年×自動化</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:"Hiragino Sans","Meiryo",sans-serif;color:#1a2744;background:#f0f4f8;line-height:1.7;}
 
-    body {
-      font-family: "Hiragino Sans", "Meiryo", sans-serif;
-      color: #1a2744;
-      line-height: 1.7;
+    /* ===ヘッダー=== */
+    .site-header{
+      background:linear-gradient(135deg,#1565c0,#0d47a1);
+      color:#fff;padding:32px 24px 28px;text-align:center;
     }
+    .site-header .top-row{display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:10px;}
+    .py-badge{background:#ffd54f;color:#333;font-size:13px;font-weight:bold;padding:4px 12px;border-radius:20px;}
+    .site-header h1{font-size:clamp(24px,5vw,40px);font-weight:bold;letter-spacing:1px;}
+    .site-header p{font-size:14px;color:#bbdefb;margin-top:6px;}
 
-    /* ナビ */
-    nav {
-      background: #1a2744;
-      padding: 16px 32px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-    nav .logo {
-      color: #fff;
-      font-weight: bold;
-      font-size: 15px;
-    }
-    nav a {
-      color: #a9dfbf;
-      text-decoration: none;
-      font-size: 13px;
-      margin-left: 24px;
-    }
+    /* ===ナビ=== */
+    nav{background:#0d47a1;display:flex;justify-content:center;gap:0;}
+    nav a{color:#e3f2fd;font-size:13px;padding:12px 24px;text-decoration:none;border-right:1px solid rgba(255,255,255,0.15);}
+    nav a:hover{background:rgba(255,255,255,0.1);}
 
-    /* ヒーロー */
-    .hero {
-      background: linear-gradient(135deg, #1a2744 0%, #1e3052 60%, #16213e 100%);
-      color: #fff;
-      padding: 80px 32px 72px;
-      text-align: center;
+    /* ===ツールセクション=== */
+    .tool-section{max-width:900px;margin:28px auto;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 16px rgba(0,0,0,0.08);}
+    .tool-section.tool2{margin-top:0;}
+
+    /* ツールヘッダー */
+    .tool-head{
+      background:linear-gradient(90deg,#1565c0,#1976d2);
+      color:#fff;padding:18px 28px;display:flex;align-items:center;gap:16px;
     }
-    .hero .badge {
-      display: inline-block;
-      background: #27ae60;
-      color: #fff;
-      font-size: 12px;
-      font-weight: bold;
-      padding: 4px 14px;
-      border-radius: 20px;
-      margin-bottom: 20px;
-      letter-spacing: 1px;
+    .tool-head.orange{background:linear-gradient(90deg,#e65100,#f57c00);}
+    .tool-head.green{background:linear-gradient(90deg,#2e7d32,#388e3c);}
+    .tool-badge{background:rgba(255,255,255,0.25);border-radius:6px;padding:4px 12px;font-size:12px;font-weight:bold;}
+    .tool-head h2{font-size:20px;font-weight:bold;}
+    .tool-head .catch{font-size:12px;color:rgba(255,255,255,0.85);margin-left:auto;}
+
+    /* ツール本体 */
+    .tool-body{padding:0;}
+
+    /* 2カラムレイアウト */
+    .two-col{display:grid;grid-template-columns:1fr 1.8fr;gap:0;border-bottom:1px solid #e8ecef;}
+    .two-col .col-left{padding:24px;border-right:1px solid #e8ecef;}
+    .two-col .col-right{padding:24px;}
+
+    /* サブタイトル */
+    .sub-title{
+      display:inline-block;background:#e3f2fd;color:#1565c0;
+      font-size:12px;font-weight:bold;padding:4px 12px;
+      border-radius:4px;margin-bottom:14px;
     }
-    .hero h1 {
-      font-size: clamp(22px, 5vw, 38px);
-      font-weight: bold;
-      line-height: 1.45;
-      margin-bottom: 20px;
+    .sub-title.orange{background:#fff3e0;color:#e65100;}
+    .sub-title.green{background:#e8f5e9;color:#2e7d32;}
+
+    /* チェックリスト */
+    .check-list{list-style:none;}
+    .check-list li{
+      display:flex;align-items:flex-start;gap:8px;
+      font-size:13px;color:#2c3e50;margin-bottom:10px;
     }
-    .hero h1 span { color: #a9dfbf; }
-    .hero p {
-      font-size: 15px;
-      color: #bdc3c7;
-      max-width: 560px;
-      margin: 0 auto 36px;
-    }
-    .hero-stats {
-      display: flex;
-      justify-content: center;
-      gap: 24px;
-      flex-wrap: wrap;
-    }
-    .hero-stats .stat {
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(39,174,96,0.4);
-      border-radius: 10px;
-      padding: 16px 28px;
-      text-align: center;
-    }
-    .hero-stats .stat .num {
-      font-size: 26px;
-      font-weight: bold;
-      color: #27ae60;
-      display: block;
-    }
-    .hero-stats .stat .label {
-      font-size: 11px;
-      color: #95a5a6;
-      margin-top: 2px;
+    .check-list li::before{
+      content:"✓";background:#1565c0;color:#fff;
+      width:18px;height:18px;border-radius:50%;
+      display:flex;align-items:center;justify-content:center;
+      font-size:10px;font-weight:bold;flex-shrink:0;margin-top:2px;
     }
 
-    /* セクション共通 */
-    section { padding: 64px 24px; }
-    .section-title {
-      text-align: center;
-      font-size: 22px;
-      font-weight: bold;
-      margin-bottom: 8px;
-      color: #1a2744;
-    }
-    .section-sub {
-      text-align: center;
-      font-size: 13px;
-      color: #7f8c8d;
-      margin-bottom: 44px;
-    }
-    .container { max-width: 900px; margin: 0 auto; }
+    /* ビフォー/アフターテーブル */
+    .ba-wrap{padding:0 24px 20px;}
+    .ba-title{font-size:12px;font-weight:bold;color:#555;margin-bottom:10px;padding:6px 12px;background:#f8f9fa;border-radius:4px;text-align:center;}
+    .ba-grid{display:grid;grid-template-columns:1fr 48px 1fr;gap:8px;align-items:start;}
+    .ba-box{border:1px solid #e0e0e0;border-radius:6px;overflow:hidden;}
+    .ba-box .ba-head{font-size:11px;font-weight:bold;padding:5px 10px;}
+    .ba-box.before .ba-head{background:#fce4ec;color:#c62828;}
+    .ba-box.after .ba-head{background:#e8f5e9;color:#2e7d32;}
+    .ba-box table{width:100%;font-size:11px;border-collapse:collapse;}
+    .ba-box table td{padding:4px 8px;border-top:1px solid #f0f0f0;}
+    .ba-box table tr:nth-child(even) td{background:#fafafa;}
+    .ba-arrow{text-align:center;font-size:24px;color:#1565c0;padding-top:28px;font-weight:bold;}
+    .ba-result{text-align:center;padding:10px;background:#e8f5e9;border-radius:6px;font-size:13px;color:#2e7d32;font-weight:bold;margin-top:8px;}
 
-    /* ツールカード */
-    .tools { background: #f8f9fa; }
-    .tool-card {
-      background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 2px 16px rgba(0,0,0,0.07);
-      margin-bottom: 28px;
-      overflow: hidden;
-      border-top: 4px solid #27ae60;
-    }
-    .tool-card.blue { border-top-color: #2980b9; }
-    .tool-card.amber { border-top-color: #f39c12; }
-    .tool-header {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      padding: 24px 28px 16px;
-    }
-    .tool-num {
-      background: #27ae60;
-      color: #fff;
-      font-size: 13px;
-      font-weight: bold;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-    .tool-card.blue .tool-num { background: #2980b9; }
-    .tool-card.amber .tool-num { background: #f39c12; }
-    .tool-header h3 { font-size: 18px; font-weight: bold; }
-    .tool-header .lang {
-      margin-left: auto;
-      font-size: 11px;
-      color: #fff;
-      background: #95a5a6;
-      padding: 3px 10px;
-      border-radius: 12px;
-    }
-    .tool-body { padding: 0 28px 24px; }
-    .before-after {
-      background: #f8f9fa;
-      border-radius: 8px;
-      padding: 16px;
-      margin: 12px 0 16px;
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
-      gap: 12px;
-      align-items: center;
-    }
-    .before-after .col { font-size: 12px; }
-    .before-after .col .lbl {
-      font-size: 10px;
-      font-weight: bold;
-      color: #e74c3c;
-      margin-bottom: 4px;
-    }
-    .before-after .col.after .lbl { color: #27ae60; }
-    .before-after .col pre {
-      background: #fff;
-      border: 1px solid #e0e0e0;
-      border-radius: 6px;
-      padding: 8px;
-      font-size: 11px;
-      white-space: pre-wrap;
-      color: #2c3e50;
-      font-family: "Courier New", monospace;
-    }
-    .before-after .arrow {
-      font-size: 22px;
-      color: #27ae60;
-      font-weight: bold;
-    }
-    .time-save {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: #eafaf1;
-      border: 1px solid #a9dfbf;
-      border-radius: 6px;
-      padding: 6px 14px;
-      font-size: 13px;
-      color: #1e8449;
-      font-weight: bold;
-    }
+    /* コードブロック */
+    .code-area{padding:0 24px 20px;}
+    .code-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+    .code-block{background:#1a2744;border-radius:8px;overflow:hidden;}
+    .code-block .code-head{background:#0d47a1;color:#e3f2fd;font-size:11px;padding:6px 12px;display:flex;align-items:center;gap:6px;}
+    .code-block .code-head::before{content:"$";background:#4caf50;color:#fff;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;}
+    .code-block pre{color:#a5d6a7;font-size:12px;padding:12px;font-family:"Courier New",monospace;white-space:pre-wrap;}
+    .customize-block{background:#f8f9fa;border:1px solid #e0e0e0;border-radius:8px;overflow:hidden;}
+    .customize-block .c-head{background:#e8eaf6;color:#3949ab;font-size:11px;font-weight:bold;padding:7px 12px;}
+    .customize-block pre{font-size:11px;padding:12px;color:#2c3e50;font-family:"Courier New",monospace;white-space:pre-wrap;}
+    .customize-block .c-note{font-size:11px;color:#7f8c8d;padding:0 12px 10px;}
 
-    /* 安心ポイント */
-    .trust { background: #fff; }
-    .trust-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 20px;
+    /* 動作確認バッジ */
+    .verified{
+      margin:0 24px 20px;padding:12px 16px;
+      background:#e8f5e9;border:1px solid #a5d6a7;border-radius:8px;
+      display:flex;align-items:flex-start;gap:10px;
     }
-    .trust-item {
-      background: #f8f9fa;
-      border-radius: 10px;
-      padding: 24px 20px;
-      text-align: center;
-      border-bottom: 3px solid #27ae60;
-    }
-    .trust-item .icon { font-size: 28px; margin-bottom: 10px; }
-    .trust-item h4 { font-size: 14px; font-weight: bold; margin-bottom: 6px; }
-    .trust-item p { font-size: 12px; color: #7f8c8d; }
+    .verified .v-icon{background:#27ae60;color:#fff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
+    .verified .v-title{font-size:12px;font-weight:bold;color:#1b5e20;margin-bottom:4px;}
+    .verified .v-body{font-size:12px;color:#2e7d32;}
 
-    /* 納品物 */
-    .delivery { background: #1a2744; color: #fff; }
-    .delivery .section-title { color: #fff; }
-    .delivery .section-sub { color: #95a5a6; }
-    .delivery-items {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      flex-wrap: wrap;
-    }
-    .d-item {
-      background: rgba(255,255,255,0.07);
-      border: 1px solid rgba(39,174,96,0.35);
-      border-radius: 10px;
-      padding: 20px 28px;
-      text-align: center;
-      min-width: 160px;
-    }
-    .d-item .di { font-size: 26px; margin-bottom: 8px; }
-    .d-item p { font-size: 13px; color: #ecf0f1; }
+    /* 仕組みフロー */
+    .flow-area{padding:0 24px 20px;}
+    .flow{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:12px;}
+    .flow-item{text-align:center;}
+    .flow-icon{font-size:28px;display:block;margin-bottom:4px;}
+    .flow-label{font-size:11px;color:#555;background:#f8f9fa;border:1px solid #ddd;border-radius:6px;padding:4px 10px;}
+    .flow-arrow{font-size:20px;color:#1565c0;font-weight:bold;}
+    .flow-multi{display:flex;gap:6px;}
 
-    /* CTA */
-    .cta {
-      background: linear-gradient(135deg, #27ae60, #1e8449);
-      color: #fff;
-      text-align: center;
-      padding: 64px 24px;
-    }
-    .cta h2 { font-size: 22px; font-weight: bold; margin-bottom: 12px; }
-    .cta p { font-size: 14px; margin-bottom: 32px; opacity: 0.9; }
-    .cta-btns { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
-    .btn {
-      display: inline-block;
-      padding: 14px 32px;
-      border-radius: 8px;
-      font-weight: bold;
-      font-size: 15px;
-      text-decoration: none;
-      transition: opacity 0.2s;
-    }
-    .btn:hover { opacity: 0.85; }
-    .btn-white { background: #fff; color: #27ae60; }
-    .btn-outline { background: transparent; color: #fff; border: 2px solid #fff; }
+    /* BA数字 */
+    .ba-num{display:grid;grid-template-columns:1fr 48px 1fr;gap:8px;align-items:center;margin:12px 0;}
+    .ba-num .n-box{text-align:center;padding:16px;border-radius:8px;border:2px solid #e0e0e0;}
+    .ba-num .n-box.bad{border-color:#e57373;background:#fff5f5;}
+    .ba-num .n-box.good{border-color:#81c784;background:#f1f8f1;}
+    .ba-num .n-val{font-size:26px;font-weight:bold;}
+    .ba-num .n-box.bad .n-val{color:#c62828;}
+    .ba-num .n-box.good .n-val{color:#2e7d32;}
+    .ba-num .n-sub{font-size:11px;color:#777;margin-top:2px;}
 
-    /* フッター */
-    footer {
-      background: #16213e;
-      color: #7f8c8d;
-      text-align: center;
-      padding: 24px;
-      font-size: 12px;
-    }
-    footer a { color: #a9dfbf; text-decoration: none; margin: 0 8px; }
+    /* ===納品物=== */
+    .delivery-section{max-width:900px;margin:0 auto 28px;background:#1a2744;border-radius:12px;padding:28px 24px;box-shadow:0 2px 16px rgba(0,0,0,0.12);}
+    .delivery-section h3{color:#fff;font-size:16px;text-align:center;margin-bottom:20px;}
+    .d-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;}
+    .d-card{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:10px;padding:20px 16px;text-align:center;}
+    .d-icon{font-size:28px;display:block;margin-bottom:8px;}
+    .d-card p{font-size:13px;color:#ecf0f1;}
+    .d-card small{font-size:11px;color:#95a5a6;}
 
-    @media (max-width: 600px) {
-      .before-after { grid-template-columns: 1fr; }
-      .before-after .arrow { text-align: center; }
-      nav a { display: none; }
+    /* ===フッター=== */
+    footer{background:#0d47a1;color:#fff;text-align:center;padding:20px;font-size:13px;}
+    footer .ai-note{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,0.1);padding:8px 20px;border-radius:24px;margin-top:10px;}
+
+    /* ===CTA=== */
+    .cta-section{max-width:900px;margin:0 auto 28px;background:linear-gradient(135deg,#27ae60,#1e8449);border-radius:12px;padding:36px 24px;text-align:center;color:#fff;}
+    .cta-section h3{font-size:20px;font-weight:bold;margin-bottom:8px;}
+    .cta-section p{font-size:14px;opacity:0.9;margin-bottom:24px;}
+    .cta-btns{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;}
+    .btn{display:inline-block;padding:13px 30px;border-radius:8px;font-weight:bold;font-size:14px;text-decoration:none;}
+    .btn-white{background:#fff;color:#27ae60;}
+    .btn-outline{background:transparent;border:2px solid #fff;color:#fff;}
+
+    @media(max-width:640px){
+      .two-col{grid-template-columns:1fr;}
+      .two-col .col-left{border-right:none;border-bottom:1px solid #e8ecef;}
+      .ba-grid{grid-template-columns:1fr;}
+      .ba-arrow{padding:0;font-size:18px;}
+      .code-row{grid-template-columns:1fr;}
+      nav a{padding:10px 14px;font-size:12px;}
+      .tool-head .catch{display:none;}
     }
   </style>
 </head>
 <body>
 
-<!-- ナビ -->
-<nav>
-  <div class="logo">業務自動化ツール</div>
-  <div>
-    <a href="#tools">できること</a>
-    <a href="#trust">安心ポイント</a>
-    <a href="#cta">依頼する</a>
+<!-- ヘッダー -->
+<div class="site-header">
+  <div class="top-row">
+    <span style="font-size:32px;">🐍</span>
+    <h1>Python・VBA 自動化ツール</h1>
+    <span style="font-size:28px;">⚙️</span>
   </div>
+  <p>面倒な繰り返し作業を自動化して、時間とミスをゼロに。</p>
+</div>
+<nav>
+  <a href="#tool1">ツール1：CSV整形</a>
+  <a href="#tool2">ツール2：帳票生成</a>
+  <a href="#tool3">ツール3：VBA集計</a>
+  <a href="#delivery">納品物</a>
+  <a href="#cta">依頼する</a>
 </nav>
 
-<!-- ヒーロー -->
-<div class="hero">
-  <div class="badge">経理10年 × VBA / Python</div>
-  <h1>
-    Excelの<span>手作業</span>を<br>
-    自動化して、時間を取り戻す。
-  </h1>
-  <p>集計・帳票作成・CSV整形など、毎月繰り返している作業を<br>スクリプト1本で完全自動化します。</p>
-  <div class="hero-stats">
-    <div class="stat">
-      <span class="num">30分</span>
-      <div class="label">→ 3秒に短縮</div>
+<!-- ===ツール1=== -->
+<div class="tool-section" id="tool1">
+  <div class="tool-head">
+    <span class="tool-badge">ツール1</span>
+    <h2>CSV整形・クレンジング</h2>
+    <span class="catch">「毎回Excelで手直ししているCSVの作業を自動化します」</span>
+  </div>
+  <div class="tool-body">
+
+    <!-- 解決する課題 / ビフォーアフター -->
+    <div class="two-col">
+      <div class="col-left">
+        <div class="sub-title">解決する課題</div>
+        <ul class="check-list">
+          <li>文字化けするCSV（Shift-JIS → UTF-8変換）</li>
+          <li>セルに混入した余分なスペース</li>
+          <li>重複行の手動チェック</li>
+          <li>空行の目視削除</li>
+        </ul>
+      </div>
+      <div class="col-right">
+        <div class="sub-title">ビフォー／アフター</div>
+        <div class="ba-grid">
+          <div class="ba-box before">
+            <div class="ba-head">Before：受け取った時のCSV</div>
+            <table>
+              <tr><td>1</td><td>"&nbsp;&nbsp;株式会社A&nbsp;&nbsp;","&nbsp;田中&nbsp;","50000"</td></tr>
+              <tr><td>2</td><td>"株式会社B","鈴木花子","30000"</td></tr>
+              <tr><td>3</td><td>"&nbsp;&nbsp;株式会社A&nbsp;&nbsp;","&nbsp;田中&nbsp;","50000"</td></tr>
+              <tr><td>4</td><td>",","","","&nbsp;&nbsp;"（空行）</td></tr>
+              <tr><td>5</td><td>"株式会社D","山田次郎","20000"</td></tr>
+              <tr><td>6</td><td></td></tr>
+              <tr><td>7</td><td></td></tr>
+            </table>
+          </div>
+          <div class="ba-arrow">→</div>
+          <div class="ba-box after">
+            <div class="ba-head">After：整形後のCSV</div>
+            <table>
+              <tr><td>1</td><td>株式会社A, 田中太郎, 50000</td></tr>
+              <tr><td>2</td><td>株式会社B, 鈴木花子, 30000</td></tr>
+              <tr><td>3</td><td>株式会社C, 佐藤一郎, 80000</td></tr>
+              <tr><td>4</td><td>株式会社D, 山田次郎, 20000</td></tr>
+            </table>
+          </div>
+        </div>
+        <div class="ba-result">7行 → 4行（重複2件・空行1件を自動削除）</div>
+      </div>
     </div>
-    <div class="stat">
-      <span class="num">100件</span>
-      <div class="label">帳票を10秒で生成</div>
+
+    <!-- 使い方 / カスタマイズ -->
+    <div class="code-area">
+      <div class="code-row">
+        <div>
+          <div class="sub-title" style="margin-bottom:10px;">使い方</div>
+          <div class="code-block">
+            <div class="code-head">コマンド</div>
+            <pre>pip install pandas
+
+python PY-001_CSV整形クレンジング.py
+  入力ファイル.csv  出力ファイル.csv</pre>
+          </div>
+        </div>
+        <div>
+          <div class="sub-title" style="margin-bottom:10px;">カスタマイズ（3行だけ）</div>
+          <div class="customize-block">
+            <div class="c-head">設定箇所</div>
+            <pre>INPUT_ENCODING  = "shift_jis"
+OUTPUT_ENCODING = "utf-8-sig"
+DROP_DUPLICATES = None</pre>
+            <div class="c-note">受け取ったCSVの文字コードに合わせる</div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="stat">
-      <span class="num">動作確認</span>
-      <div class="label">納品前に必ずテスト済み</div>
+
+    <!-- 動作確認 -->
+    <div class="verified">
+      <div class="v-icon">✓</div>
+      <div>
+        <div class="v-title">動作確認済み環境</div>
+        <div class="v-body">Python 3.14.3 / pandas 3.0.1　・　入力：Shift-JIS CSV（7行・重複2件・空行1件含む）　・　出力：UTF-8（BOM付き）CSV 4行 ✅</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===ツール2=== -->
+<div class="tool-section" id="tool2">
+  <div class="tool-head orange">
+    <span class="tool-badge">ツール2</span>
+    <h2>Excel帳票自動生成</h2>
+    <span class="catch">「毎月100件の請求書をExcelで手作りしている作業を10秒にします」</span>
+  </div>
+  <div class="tool-body">
+
+    <!-- 解決する課題 / 仕組み -->
+    <div class="two-col">
+      <div class="col-left">
+        <div class="sub-title orange">解決する課題</div>
+        <ul class="check-list">
+          <li>テンプレートExcelへの手動コピペ</li>
+          <li>件数が増えるほど増える転記ミスのリスク</li>
+          <li>ファイル名を1つずつ付ける手間</li>
+        </ul>
+      </div>
+      <div class="col-right">
+        <div class="sub-title orange">仕組み</div>
+        <div class="flow">
+          <div class="flow-item">
+            <span class="flow-icon">📋</span>
+            <span class="flow-label">template.xlsx<br><small>（雛形）</small></span>
+          </div>
+          <span style="font-size:20px;color:#e65100;">＋</span>
+          <div class="flow-item">
+            <span class="flow-icon">📊</span>
+            <span class="flow-label">data.csv<br><small>（宛先・金額リスト）</small></span>
+          </div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-multi">
+            <div class="flow-item">
+              <span class="flow-icon">📄</span>
+              <span class="flow-label" style="font-size:10px;">doc_001.xlsx</span>
+            </div>
+            <div class="flow-item">
+              <span class="flow-icon">📄</span>
+              <span class="flow-label" style="font-size:10px;">doc_002.xlsx</span>
+            </div>
+            <div class="flow-item">
+              <span class="flow-icon">📄</span>
+              <span class="flow-label" style="font-size:10px;">…</span>
+            </div>
+          </div>
+        </div>
+        <div style="text-align:center;font-size:12px;color:#e65100;margin-top:8px;">← CSVの件数分を自動生成</div>
+      </div>
+    </div>
+
+    <!-- ビフォーアフター数値 -->
+    <div style="padding:0 24px 4px;">
+      <div class="sub-title orange">ビフォー／アフター</div>
+      <div class="ba-num">
+        <div class="n-box bad">
+          <div class="n-val">500分</div>
+          <div class="n-sub">手作業で1件5分 × 100件<br>＝ 約8時間以上</div>
+        </div>
+        <div class="ba-arrow" style="text-align:center;font-size:28px;color:#e65100;">→</div>
+        <div class="n-box good">
+          <div class="n-val">10秒</div>
+          <div class="n-sub">python PY-003_Excel自動生成.py<br>を実行するだけ</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 使い方 / 設定 -->
+    <div class="code-area">
+      <div class="code-row">
+        <div>
+          <div class="sub-title orange" style="margin-bottom:10px;">使い方</div>
+          <div class="code-block">
+            <div class="code-head" style="background:#bf360c;">コマンド</div>
+            <pre>pip install pandas openpyxl
+
+python PY-003_Excel自動生成.py</pre>
+          </div>
+        </div>
+        <div>
+          <div class="sub-title orange" style="margin-bottom:10px;">セルの対応設定（MAPPINGを変更するだけ）</div>
+          <div class="customize-block">
+            <div class="c-head" style="background:#fff3e0;color:#e65100;">MAPPING設定</div>
+            <pre>MAPPING = {
+  "会社名": "B3",
+  "担当者": "B4",
+  "金額":   "D10",
+  "日付":   "F2",
+}</pre>
+            <div class="c-note" style="color:#e65100;">configファイルは不要です。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 動作確認 -->
+    <div class="verified" style="background:#fff3e0;border-color:#ffcc80;">
+      <div class="v-icon" style="background:#e65100;">✓</div>
+      <div>
+        <div class="v-title" style="color:#bf360c;">動作確認済み環境</div>
+        <div class="v-body" style="color:#e65100;">Python 3.14.3 / openpyxl 3.1.x / pandas 3.0.1　・　入力：data.csv 3件 + template.xlsx　・　出力：document_001〜003.xlsx（全セル正常書き込み） ✅</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===ツール3=== -->
+<div class="tool-section" id="tool3">
+  <div class="tool-head green">
+    <span class="tool-badge">ツール3</span>
+    <h2>Excel集計マクロ（VBA）</h2>
+    <span class="catch">「毎月の集計作業をボタン1つで完了させます」</span>
+  </div>
+  <div class="tool-body">
+
+    <div class="two-col">
+      <div class="col-left">
+        <div class="sub-title green">解決する課題</div>
+        <ul class="check-list">
+          <li>毎月SUMIF関数の範囲を修正している</li>
+          <li>集計結果を別シートへ手動コピペ</li>
+          <li>データが増えるたびに作業が増える</li>
+        </ul>
+      </div>
+      <div class="col-right">
+        <div class="sub-title green">ビフォー／アフター</div>
+        <div class="ba-grid">
+          <div class="ba-box before">
+            <div class="ba-head">Before：データシート</div>
+            <table>
+              <tr><td>経費A</td><td>5,000円</td></tr>
+              <tr><td>経費B</td><td>3,000円</td></tr>
+              <tr><td>経費A</td><td>2,000円</td></tr>
+              <tr><td>経費C</td><td>8,000円</td></tr>
+              <tr><td>経費B</td><td>1,500円</td></tr>
+            </table>
+          </div>
+          <div class="ba-arrow">→</div>
+          <div class="ba-box after">
+            <div class="ba-head">After：集計シート（自動生成）</div>
+            <table>
+              <tr><td>経費A</td><td><strong>7,000円</strong></td></tr>
+              <tr><td>経費B</td><td><strong>4,500円</strong></td></tr>
+              <tr><td>経費C</td><td><strong>8,000円</strong></td></tr>
+            </table>
+          </div>
+        </div>
+        <div class="ba-result" style="background:#e8f5e9;color:#2e7d32;">毎月20分の作業 → 1クリックで完了</div>
+      </div>
+    </div>
+
+    <!-- 使い方 -->
+    <div class="code-area">
+      <div class="code-row">
+        <div>
+          <div class="sub-title green" style="margin-bottom:10px;">インポート手順</div>
+          <div class="code-block">
+            <div class="code-head" style="background:#1b5e20;">手順</div>
+            <pre>1. Alt + F11 → VBAエディタを開く
+2. ファイル → インポート
+3. VBA-001_集計マクロ.bas を選択
+4. Alt + F8 → CollectData → 実行</pre>
+          </div>
+        </div>
+        <div>
+          <div class="sub-title green" style="margin-bottom:10px;">カスタマイズ（3行だけ）</div>
+          <div class="customize-block">
+            <div class="c-head" style="background:#e8f5e9;color:#2e7d32;">設定箇所</div>
+            <pre>INPUT_SHEET  = "データ"
+OUTPUT_SHEET = "集計"
+COL_TARGET   = 3</pre>
+            <div class="c-note" style="color:#2e7d32;">シート名と集計列番号を変えるだけ</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 動作確認 -->
+    <div class="verified" style="background:#e8f5e9;border-color:#a5d6a7;">
+      <div class="v-icon" style="background:#2e7d32;">✓</div>
+      <div>
+        <div class="v-title" style="color:#1b5e20;">動作確認済み環境</div>
+        <div class="v-body" style="color:#2e7d32;">Excel 2016以上（Windows）対応　・　5行データ（3項目・重複あり）→ 正確に集計（経費A:7,000 / B:4,500 / C:8,000）✅</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===納品物=== -->
+<div class="delivery-section" id="delivery">
+  <h3>📦 共通 納品物セット</h3>
+  <div class="d-grid">
+    <div class="d-card">
+      <span class="d-icon">📄</span>
+      <p>スクリプト本体</p>
+      <small>（.py / .bas）<br>すぐに使えるスクリプト</small>
+    </div>
+    <div class="d-card">
+      <span class="d-icon">📖</span>
+      <p>操作手順書</p>
+      <small>（PDF）<br>わかりやすい手順書</small>
+    </div>
+    <div class="d-card">
+      <span class="d-icon">🎥</span>
+      <p>操作動画</p>
+      <small>（Loom 2〜5分）<br>初めての方でも安心</small>
+    </div>
+    <div class="d-card">
+      <span class="d-icon">🛠</span>
+      <p>30日間サポート</p>
+      <small>納品後の不具合は<br>無償対応</small>
     </div>
   </div>
 </div>
 
-<!-- ツール紹介 -->
-<section class="tools" id="tools">
-  <div class="container">
-    <div class="section-title">できること</div>
-    <div class="section-sub">実際に動作確認済みのツールです</div>
-
-    <!-- ツール1 -->
-    <div class="tool-card">
-      <div class="tool-header">
-        <div class="tool-num">1</div>
-        <h3>CSV整形・クレンジング</h3>
-        <span class="lang">Python</span>
-      </div>
-      <div class="tool-body">
-        <p style="font-size:13px; color:#555; margin-bottom:12px;">取引先から届く「汚いCSV」を自動でクリーンにします。文字化け・重複・空行を一括除去。</p>
-        <div class="before-after">
-          <div class="col">
-            <div class="lbl">Before（受け取ったCSV）</div>
-            <pre>  株式会社A  , 田中 ,50000
-株式会社B,鈴木花子,30000
-  株式会社A  , 田中 ,50000
-（重複行）
-,,,（空行）</pre>
-          </div>
-          <div class="arrow">→</div>
-          <div class="col after">
-            <div class="lbl">After（整形後）</div>
-            <pre>株式会社A,田中太郎,50000
-株式会社B,鈴木花子,30000
-株式会社C,佐藤一郎,80000
-株式会社D,山田次郎,20000</pre>
-          </div>
-        </div>
-        <div class="time-save">⏱ 30分の手作業 → 3秒で完了</div>
-      </div>
-    </div>
-
-    <!-- ツール2 -->
-    <div class="tool-card blue">
-      <div class="tool-header">
-        <div class="tool-num">2</div>
-        <h3>Excel帳票（請求書・納品書）自動生成</h3>
-        <span class="lang">Python</span>
-      </div>
-      <div class="tool-body">
-        <p style="font-size:13px; color:#555; margin-bottom:12px;">Excelテンプレートにデータを流し込み、件数分のファイルを一括生成。転記ミスもゼロに。</p>
-        <div class="before-after">
-          <div class="col">
-            <div class="lbl" style="color:#e74c3c;">Before</div>
-            <pre>100件の請求書を
-1件ずつExcelに
-コピペ…
-
-約8時間の作業</pre>
-          </div>
-          <div class="arrow">→</div>
-          <div class="col after">
-            <div class="lbl">After</div>
-            <pre>data.csv を用意して
-スクリプトを実行
-
-document_001.xlsx
-document_002.xlsx
-…100件 完成 ✓</pre>
-          </div>
-        </div>
-        <div class="time-save" style="background:#eaf4fb; border-color:#aed6f1; color:#1a5276;">⏱ 8時間の作業 → 10秒で完了</div>
-      </div>
-    </div>
-
-    <!-- ツール3 -->
-    <div class="tool-card amber">
-      <div class="tool-header">
-        <div class="tool-num">3</div>
-        <h3>Excel集計マクロ（VBA）</h3>
-        <span class="lang">VBA</span>
-      </div>
-      <div class="tool-body">
-        <p style="font-size:13px; color:#555; margin-bottom:12px;">毎月の売上・経費・在庫集計をボタン1つで自動実行。データが増えても範囲修正不要。</p>
-        <div class="before-after">
-          <div class="col">
-            <div class="lbl" style="color:#e74c3c;">Before</div>
-            <pre>データ行が増えるたびに
-SUMIF の範囲を修正…
-
-集計して別シートへ
-コピペ…毎月20分</pre>
-          </div>
-          <div class="arrow">→</div>
-          <div class="col after">
-            <div class="lbl">After</div>
-            <pre>マクロを実行（1クリック）
-
-経費A | 7,000円
-経費B | 4,500円
-経費C | 8,000円
-
-集計シートへ自動出力 ✓</pre>
-          </div>
-        </div>
-        <div class="time-save" style="background:#fef9e7; border-color:#fad7a0; color:#784212;">⏱ 毎月20分の作業 → 1クリックで完了</div>
-      </div>
-    </div>
+<!-- ===CTA=== -->
+<div class="cta-section" id="cta">
+  <h3>まずはお気軽にご相談ください</h3>
+  <p>「こんな作業、自動化できる？」だけでも大歓迎です。<br>ダミーデータで30分のプロトタイプをお見せすることもできます。</p>
+  <div class="cta-btns">
+    <a href="https://crowdworks.jp/public/employees/6871836" class="btn btn-white" target="_blank">クラウドワークスで相談する</a>
+    <a href="https://github.com/cfiladmin/vba-python-tools" class="btn btn-outline" target="_blank">GitHubでコードを見る</a>
   </div>
-</section>
-
-<!-- 安心ポイント -->
-<section class="trust" id="trust">
-  <div class="container">
-    <div class="section-title">安心ポイント</div>
-    <div class="section-sub">ご依頼前にご確認ください</div>
-    <div class="trust-grid">
-      <div class="trust-item">
-        <div class="icon">✅</div>
-        <h4>動作確認済み</h4>
-        <p>すべてのツールは納品前にテスト済みです。実際のサンプルデータで動作を確認してからお渡しします。</p>
-      </div>
-      <div class="trust-item">
-        <div class="icon">📋</div>
-        <h4>操作手順書付き</h4>
-        <p>PDFの操作マニュアルと操作動画（2〜5分）をセットで納品します。初めての方でも安心です。</p>
-      </div>
-      <div class="trust-item">
-        <div class="icon">🔒</div>
-        <h4>機密情報は使いません</h4>
-        <p>開発はダミーデータで行います。本番データ・個人情報をツールに入力することはありません。</p>
-      </div>
-      <div class="trust-item">
-        <div class="icon">🤖</div>
-        <h4>AI使用を開示</h4>
-        <p>開発にAIツールを活用しています。仕様確認・テスト・手順書の最終確認は必ず人間が行います。</p>
-      </div>
-      <div class="trust-item">
-        <div class="icon">💼</div>
-        <h4>経理10年の知識</h4>
-        <p>財務・経理業務の実務経験があるため、業務フローに合った自動化を提案できます。</p>
-      </div>
-      <div class="trust-item">
-        <div class="icon">🔧</div>
-        <h4>30日間サポート</h4>
-        <p>納品後30日間は同一不具合の修正を無償で対応します。</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- 納品物 -->
-<section class="delivery">
-  <div class="container">
-    <div class="section-title">納品物セット</div>
-    <div class="section-sub">すべてのご依頼に含まれます</div>
-    <div class="delivery-items">
-      <div class="d-item">
-        <div class="di">📄</div>
-        <p>スクリプト本体<br>（.py / .bas）</p>
-      </div>
-      <div class="d-item">
-        <div class="di">📖</div>
-        <p>操作手順書<br>（PDF）</p>
-      </div>
-      <div class="d-item">
-        <div class="di">🎥</div>
-        <p>操作動画<br>（2〜5分）</p>
-      </div>
-      <div class="d-item">
-        <div class="di">🛠</div>
-        <p>30日間<br>無償サポート</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CTA -->
-<section class="cta" id="cta">
-  <div class="container">
-    <h2>まずはお気軽にご相談ください</h2>
-    <p>「こんな作業を自動化できる？」というご質問だけでも大歓迎です。<br>ダミーデータで30分のプロトタイプをお見せすることもできます。</p>
-    <div class="cta-btns">
-      <a href="https://crowdworks.jp/public/employees/6871836" class="btn btn-white" target="_blank">
-        クラウドワークスで相談する
-      </a>
-      <a href="https://github.com/cfiladmin/vba-python-tools" class="btn btn-outline" target="_blank">
-        GitHubでコードを見る
-      </a>
-    </div>
-  </div>
-</section>
+</div>
 
 <!-- フッター -->
 <footer>
-  <p>© 2026 業務自動化ツール（cfiladmin）</p>
-  <p style="margin-top:8px;">
-    <a href="https://github.com/cfiladmin/vba-python-tools" target="_blank">GitHub</a>
-    <a href="https://crowdworks.jp" target="_blank">クラウドワークス</a>
-  </p>
+  <div>© 2026 業務自動化ツール（cfiladmin）</div>
+  <div class="ai-note">🛡 AI使用・最終確認は人間が行っています。</div>
 </footer>
 
 </body>
