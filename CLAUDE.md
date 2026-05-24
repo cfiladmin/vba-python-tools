@@ -78,6 +78,7 @@ SKILL.mdに納品フローとツールテンプレートを蓄積する。
 - [x] 週1〜2: GitHubポートフォリオ公開 → https://github.com/cfiladmin/vba-python-tools
 - [x] 週3〜4: クラウドワークス プロフィール更新（経理10年×Python/VBA）
 - [x] 週3〜4: 出品ページ文章作成（3本分）
+- [x] 週3〜4: ポートフォリオLP公開 → https://vba-python-tools.vercel.app
 - [ ] 週3〜4: ランサーズ/ココナラへの出品（サービス掲載3件）
 - [ ] 週5〜6: 初受注2件・評価獲得
 - [ ] 週7〜8: 評価5件・リピート1件
